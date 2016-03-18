@@ -2,31 +2,45 @@ require 'byebug'
 require 'colorize'
 require 'io/console'
 require_relative 'piece'
+#requireable includes all pieces and types of pieces, as well as "build_pieces"
 require_relative 'requireable'
 require_relative 'cursorable'
 require_relative 'display' #Erase later
 
 class Board
-  attr_accessor :rows
+  attr_accessor :board
 
   def initialize(game_start = true)
-    @rows = build_board
+    #Build an 8x8 board.
+    #An array filled with 8 arrays, each with 8 empty pieces
+    @board = build_board
+    #Replace some of the empty pieces with starting pieces.
+    #All the pieces
+    #Still trying to figure out why game_start is a thing.
     populate if game_start
   end
 
+  def cycle_through_squares(&prc)
+
+  end
+  #Makes a board of empty pieces.
   def build_board
-    Array.new(8) { |row| Array.new(8) {|col| EmptyPiece.new(row, col, false)}}
+    Array.new(8) { |row| Array.new(8) {|col| EmptyPiece.new(2, @board)}}
   end
 
+  #Takes a position ([i,j]), and returns whether it's on the board.
   def in_bounds?(pos)
     row, col = pos
     row.between?(0, 7) && col.between?(0, 7)
   end
 
+  #Takes a position ([i,j]), and returns whether it's empty.
   def is_empty?(pos)
+    row, col = pos
     self[row,col].nil? ? true : false
   end
 
+  #I'll get to THIS one later...
   def in_check?(color)
     king_position = king_finder(color)
     color == 0 ? opp_color = 1 : opp_color = 0
@@ -38,40 +52,48 @@ class Board
     end
   end
 
-  def whats_here(num)
-    flat = @rows.flatten
-    flat[num]
-  end
+  #Hmmm, this function seems like a terrible idea.
+  #Takes a number?  Oh god.
 
-  def is_color_piece?(row, col, color)
-
+  #Takes a position and a color (0,1)
+  #Returns whether that color piece is at that position.
+  #is_empty? is better for color 2 (empty_piece)
+  def is_color_piece?(pos, color)
+    pos = row, col
+    self[row,col].color == color
   end
 
   def king_finder(color)
-    @rows.each {|row|row.each do |piece|
+    @board.each {|row|row.each do |piece|
         x,y = piece.pos
         return [x,y] if is_king?(x, y, color)
       end
     }
   end
 
+
+
   def is_king?(row, col, king_color)
-    @rows[row][col].class == King && @rows[row][col].color == king_color
+    @board[row][col].class == King && @board[row][col].color == king_color
   end
 
+  #Because of this, you can do @board[row, col] to indicate @board[row][col]
   def [](row, col)
-    @rows[row][col]
+    @board[row][col]
   end
 
+  #Because of this, you can do @board[row, col]=piece
+  #to indicate @board[row][col] = piece
   def []=(row, col, piece)
-    @rows[row][col] = piece
+    @board[row][col] = piece
   end
 
-  def move(start, end_pos)
+  def move(start_pos, end_pos)
 
   end
 
   def populate
+    #These are found in "build_pieces.rb", which is found in "requireable.rb"
     build_knights
     build_queens
     build_kings
@@ -89,8 +111,3 @@ class Board
   end
 
 end
-# if __FILE__ == $PROGRAM_NAME
-#   b = Board.new
-#   d = Display.new(b)
-#   d.render
-# end

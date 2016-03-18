@@ -1,9 +1,6 @@
 class King < SteppingPiece
   def move_dirs
-    possible_dirs = [
-      [-1,-1], [-1, 1], [1, -1], [1,  1],
-      [0, 1], [0,-1], [1, 0], [-1,0]
-    ]
+    diag_moves + udlr_moves
   end
 
   def to_s

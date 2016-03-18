@@ -1,22 +1,28 @@
+# require_relative 'cursorable'
+
 class Display
   include Cursorable
+  attr_accessor :cursor_pos
 
   def initialize(board)
     @board = board
-    @cursor_pos = [0,0]
+    # @cursor_pos = [0,0]
   end
 
   def build_grid
-    @board.rows.map.with_index do |row, i|
-      build_row(row, i)
+    grid = ["","","","","","","",""]
+    8.times do |row|
+      8.times do |col|
+        grid[row] += self.build_row(row, col, @board[row,col])
+        # debugger
+      end
     end
+    grid
   end
 
-  def build_row(row, i)
-    row.map.with_index do |piece, j|
-      color_options = colors_for(i, j)
+  def build_row(row, col, piece)
+      color_options = colors_for(row, col)
       piece.to_s.colorize(color_options)
-    end
   end
 
   def colors_for(i, j)
@@ -30,11 +36,15 @@ class Display
    { background: bg, color: :white }
   end
 
-  def render
+  def render(cursor_pos)
     system("clear")
     puts "Fill the grid!"
     puts "Arrow keys to move, space or enter to confirm."
+    @cursor_pos = cursor_pos
+    build_grid.each do |row|
+       puts row
+      #  debugger;
+    end
     # debugger
-    build_grid.each { |row| puts row.join }
   end
 end

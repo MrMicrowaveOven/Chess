@@ -18,7 +18,9 @@ module Cursorable
     down: [1, 0]
   }
 
-  def get_input
+  def get_input(cursor_pos)
+    @cursor_pos = cursor_pos
+
     key = KEYMAP[read_char]
     handle_key(key)
   end
@@ -31,7 +33,6 @@ module Cursorable
       @cursor_pos
     when :left, :right, :up, :down
       update_pos(MOVES[key])
-      nil
     else
       puts key
     end
@@ -53,8 +54,21 @@ module Cursorable
     return input
   end
 
-  def update_pos(diff)
-    new_pos = [@cursor_pos[0] + diff[0], @cursor_pos[1] + diff[1]]
-    @cursor_pos = new_pos if @board.in_bounds?(new_pos)
+
+  def get_cursor_pos
+    @cursor_pos
   end
+
+  def update_pos(diff)
+    # debugger
+    new_pos = [@cursor_pos[0] + diff[0], @cursor_pos[1] + diff[1]]
+    @cursor_pos = new_pos if in_bounds?(new_pos)
+    @cursor_pos
+  end
+
+  def in_bounds?(pos)
+    row, col = pos
+    row.between?(0, 7) && col.between?(0, 7)
+  end
+
 end
