@@ -20,7 +20,7 @@ class Board
     populate if game_start
   end
 
-  
+
 
   def cycle_through_squares(&prc)
 
@@ -54,8 +54,6 @@ class Board
     end
   end
 
-  #Hmmm, this function seems like a terrible idea.
-  #Takes a number?  Oh god.
 
   #Takes a position and a color (0,1)
   #Returns whether that color piece is at that position.
@@ -73,8 +71,6 @@ class Board
     }
   end
 
-
-
   def is_king?(row, col, king_color)
     @board[row][col].class == King && @board[row][col].color == king_color
   end
@@ -91,7 +87,10 @@ class Board
   end
 
   def move(start_pos, end_pos)
-
+    srow, scol = start_pos
+    erow, ecol = end_pos
+    @board[erow, ecol] = @board[srow, scol]
+    @board[srow, scol] = EmptyPiece.new(2, @board)
   end
 
   def populate
