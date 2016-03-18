@@ -21,7 +21,7 @@ class Game
         @board.show_valid_moves(@piece_selected)
       end
       @d.render(@cursor_pos)
-
+      p @cursor_pos
     end
   end
 
