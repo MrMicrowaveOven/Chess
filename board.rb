@@ -89,7 +89,7 @@ class Board
   def move(start_pos, end_pos)
     srow, scol = start_pos
     erow, ecol = end_pos
-    @board[erow, ecol] = @board[srow, scol]
+    @board[erow, ecol], @board[srow, scol] = @board[srow, scol], @board[erow, ecol]
     @board[srow, scol] = EmptyPiece.new(2, @board)
   end
 
