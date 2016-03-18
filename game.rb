@@ -8,6 +8,7 @@ class Game
       @board = Board.new
       @d = Display.new(@board)
       @cursor_pos = [0,0]
+      @piece_selected = nil
       @d.render(@cursor_pos)
     end
     start_game
@@ -16,8 +17,11 @@ class Game
   def start_game
     until game_over
       @cursor_pos = take_user_input
-
+      if @piece_selected
+        @board.show_valid_moves(@piece_selected)
+      end
       @d.render(@cursor_pos)
+
     end
   end
 

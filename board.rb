@@ -20,6 +20,8 @@ class Board
     populate if game_start
   end
 
+  
+
   def cycle_through_squares(&prc)
 
   end
